@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'kml-pipe-swift_Example' do
+  pod 'kml-pipe-swift', :path => '../'
+
+  target 'kml-pipe-swift_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
