@@ -52,7 +52,7 @@ public class KMLPipeline {
         
         
         // reset execution state
-        self.vars = [:]
+        self.vars.removeAll()
         
         // set inputs
         self.pipeline?.inputs.enumerated().forEach { i, input in
