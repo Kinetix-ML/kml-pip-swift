@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'kml-pipe-swift'
-  s.version          = '0.1.0'
+  s.version          = '0.2.1'
   s.summary          = 'A short description of kml-pipe-swift.'
 
 # This description is used to generate tags and improve search results.
@@ -41,7 +41,7 @@ This package lets you deploy Kinetix ML pipelines from the Kinetix ML platform t
   
   s.dependency 'TensorFlowLiteSwift/CoreML', '~> 2.4.0'
   s.dependency 'TensorFlowLiteSwift/Metal', '~> 2.4.0'
-  s.dependency 'GoogleMLKit/PoseDetection', '3.2.0'
+  # s.dependency 'GoogleMLKit/PoseDetection', '3.2.0'
 
   s.static_framework = true
   # s.public_header_files = 'Pod/Classes/**/*.h'
