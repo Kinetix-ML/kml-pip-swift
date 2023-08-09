@@ -21,22 +21,17 @@ public class KMLPipeline {
     public func initialize() async throws {
         let response = try await getProjectVersion(projectName: self.projectName, projectVersion: self.projectVersion, apiKey: self.apiKey)
         
-        print("got here")
         self.project = response.project
         self.version = response.version
         
         self.pipeline = self.version?.pipeline
         self.nodes = self.version?.pipeline.nodes ?? []
         
-        
-        print(self.nodes)
         for node in self.nodes! {
             if self.execNodes[node.id] == nil {
                 let newExecNode = initProcess(cvnode: node, vars: self.vars)
                 try await newExecNode.initialize()
                 self.execNodes[node.id] = newExecNode
-                print("adding exec node: \(node.id) \(newExecNode)")
-            
             }
         }
         
@@ -72,19 +67,14 @@ public class KMLPipeline {
         
         // run while loop
         while readyNodes.count > 0 {
-            print("[Node Exeuction] running for \(readyNodes.count) ready nodes")
             for node in readyNodes {
-                print("[Node Execution] execution node \(node.id)")
-                print("node to execute: \(self.execNodes[node.id])")
                 guard let execNode = self.execNodes[node.id] as? CVNodeProcess else {
                     throw ExecutionError.executionNodeNotInitializedProperly
                 }
                 try await execNode.execute(vars: &self.vars)
             }
             executedNodes.append(contentsOf: readyNodes)
-            print("executed nodes: \(executedNodes)")
             readyNodes = checkReadyNodes(nodes: nodes, executedNodes: executedNodes, vars: self.vars)
-            print("[Node Exeuction] adding \(readyNodes.count) new ready nodes ")
         }
         
         let res = self.pipeline?.outputs.enumerated().map { i, output in
@@ -98,23 +88,18 @@ public class KMLPipeline {
     }
     
     private func checkReadyNodes(nodes: [CVNode], executedNodes: [CVNode], vars: [String: Any]) -> [CVNode] {
-        print("nodes \(nodes)")
         let notExecuted = nodes.filter { n in
             let eN = executedNodes.filter { e in
                 return e.id == n.id
             }
             return eN.count == 0
         }
-        print("executedNodes \(notExecuted)")
         let ready = notExecuted.filter { n in
             let ins = n.inputs.filter { input in
-                print("input val: \(input.connection?.id) \(self.vars[input.connection!.id])")
                 return self.vars[input.connection!.id] != nil
             }
             return ins.count == n.inputs.count
         }
-        
-        print("read: \(ready) vars: \(vars)")
         return ready
     }
     

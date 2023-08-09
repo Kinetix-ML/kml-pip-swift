@@ -25,7 +25,6 @@ class PoseDetection2D: CVNodeProcess {
         }
         let pose = try self.detector?.estimateSinglePose(on: input as! CVPixelBuffer)
         if let pose = pose {
-            print("pose detection output: \(pose.0.keyPoints)")
             vars[self.cvnode.outputs[0].id] = pose.0
         } else {
             vars[self.cvnode.outputs[0].id] = DataType.NoDetections

@@ -16,10 +16,8 @@ enum APIError: Error {
 func getProjectVersion(projectName: String, projectVersion: Int, apiKey: String) async throws -> APIResponse {
     let urlString = "https://getpipeline-kk2bzka6nq-uc.a.run.app/?projectName=\(projectName)&version=\(projectVersion)&apiKey=\(apiKey)"
     let replacedURL = urlString.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
-    print(replacedURL)
     if let url = URL(string: replacedURL) {
         let (data, response) = try await URLSession.shared.data(from: url)
-        print("got here")
             if let dict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 let apiResponse = try buildAPIResponse(json: dict)
                 return apiResponse
@@ -27,7 +25,6 @@ func getProjectVersion(projectName: String, projectVersion: Int, apiKey: String)
                 throw APIError.requestNotFullfilledCorrectly
             }
     } else {
-        print("invalid url")
         throw APIError.requestNotFullfilledCorrectly
     }
 }
@@ -78,7 +75,6 @@ func parseInputs(ins: [[String: Any]]) throws -> [CVVariable] {
         guard let id = i["id"] as? String, let name = i["name"] as? String, let dataType = i["dataType"] as? String else {
             throw APIError.parsingFailed
         }
-        print(dataType)
         return CVVariable(id: id, name: name, dataType: DataType(rawValue: dataType) ?? DataType.AnyType)
     }
     return inputs
@@ -92,7 +88,6 @@ func parseOutputs(ous: [[String: Any]]) throws -> [CVVariableConnection] {
         guard let cDataType = connection["dataType"] as? String, let cName = connection["name"] as? String, let cId = connection["id"] as? String else {
             throw APIError.parsingFailed
         }
-        print(dataType)
         let c = CVVariable(id: cId, name: cName, dataType: DataType(rawValue: cDataType) ?? DataType.AnyType)
         return CVVariableConnection(id: id, connection: c, dataType: DataType(rawValue: dataType) ?? DataType.AnyType)
     }
