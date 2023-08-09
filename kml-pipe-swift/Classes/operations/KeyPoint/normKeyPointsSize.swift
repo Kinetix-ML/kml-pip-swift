@@ -28,8 +28,8 @@ class NormKeyPointsSize: CVNodeProcess {
             kp.coordinate.y = (kp.coordinate.y - minY) / y
             return kp
             }
-        frame.keyPoints = newKeypoints
-        vars[self.cvnode.outputs[0].id] = frame
+        let newFrame = KPFrame(keyPoints: newKeypoints, score: frame.score)
+        vars[self.cvnode.outputs[0].id] = newFrame
         
     }
     
