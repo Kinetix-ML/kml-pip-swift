@@ -52,10 +52,10 @@ enum ValueTypes {
 }
 
 public struct CVVariable {
-    var id: String
-    var name: String
-    var dataType: DataType
-    var value: Any?
+    public var id: String
+    public var name: String
+    public var dataType: DataType
+    public var value: Any?
 }
 
 public struct CVParameter {

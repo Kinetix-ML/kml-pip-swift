@@ -38,7 +38,7 @@ public class KMLPipeline {
         
     }
     
-    public func execute(inputValues: [Any]) async throws -> [CVVariableConnection] {
+    public func execute(inputValues: [Any]) async throws -> [CVVariable] {
         
         // check inputs
         if inputValues.count != self.pipeline?.inputs.count {
@@ -78,9 +78,9 @@ public class KMLPipeline {
         }
         
         let res = self.pipeline?.outputs.enumerated().map { i, output in
-            let newVar = CVVariable(id: output.connection!.id, name: output.connection!.name, dataType: DataType(rawValue: (output.connection?.dataType)!.rawValue) ?? DataType.AnyType, value: self.vars[output.connection!.id])
-            let newOutput = CVVariableConnection(id: output.id, connection: newVar, dataType: output.dataType)
-            return newOutput
+            let newVar = CVVariable(id: output.id, name: output.connection!.name, dataType: DataType(rawValue: (output.connection?.dataType)!.rawValue) ?? DataType.AnyType, value: self.vars[output.connection!.id])
+            
+            return newVar
         }
         
         // return results
