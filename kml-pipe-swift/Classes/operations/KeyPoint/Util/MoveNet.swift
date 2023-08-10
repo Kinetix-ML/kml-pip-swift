@@ -316,7 +316,7 @@ final class MoveNet: PoseEstimator {
     var yMin: CGFloat
     var width: CGFloat
     var height: CGFloat
-    if imageWidth > imageHeight {
+    if imageWidth < imageHeight {
       height = 1
       width = imageHeight / imageWidth
       yMin = 0
