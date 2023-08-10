@@ -24,13 +24,13 @@ class NormKeyPointsSize: CVNodeProcess {
             minX = (maxX + minX) / 2 - y / 2;
 
         let newKeypoints = frame.keyPoints.map {kp in
-            kp.coordinate.x = (kp.coordinate.x - minX) / y
-            kp.coordinate.y = (kp.coordinate.y - minY) / y
-            return kp
+            var newCoord = CGPoint(x: kp.coordinate.x, y: kp.coordinate.y)
+            newCoord.x = (newCoord.x - minX) / y
+            newCoord.y = (newCoord.y - minY) / y
+            return KeyPoint(bodyPart: kp.bodyPart, coordinate: newCoord, score: kp.score)
             }
         let newFrame = KPFrame(keyPoints: newKeypoints, score: frame.score)
         vars[self.cvnode.outputs[0].id] = newFrame
-        
     }
     
     private func findMaxY(_ frame: KPFrame) -> CGFloat {
